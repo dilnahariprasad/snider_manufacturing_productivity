@@ -1,0 +1,11 @@
+resources:
+  pipelines:
+    productivity_dlt:
+      name: snider-productivity-dlt-${bundle.target}
+      catalog: ${var.catalog}
+      schema: ${var.schema_prefix}_dlt
+      serverless: true
+      libraries:
+        - file: { path: ../src/dlt_pipeline.py }
+      configuration:
+        landing_path: /Volumes/${var.catalog}/${var.schema_prefix}_landing/raw

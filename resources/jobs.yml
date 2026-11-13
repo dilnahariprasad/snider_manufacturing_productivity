@@ -1,0 +1,32 @@
+resources:
+  jobs:
+    productivity_pipeline:
+      name: snider-productivity-pipeline-${bundle.target}
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: '2'
+      tasks:
+        - task_key: setup
+          environment_key: default
+          spark_python_task:
+            python_file: ../src/00_setup.py
+            parameters: ["--catalog", "${var.catalog}", "--prefix", "${var.schema_prefix}"]
+        - task_key: bronze
+          environment_key: default
+          depends_on: [{ task_key: setup }]
+          spark_python_task:
+            python_file: ../src/01_bronze.py
+            parameters: ["--catalog", "${var.catalog}", "--prefix", "${var.schema_prefix}"]
+        - task_key: silver
+          environment_key: default
+          depends_on: [{ task_key: bronze }]
+          spark_python_task:
+            python_file: ../src/02_silver.py
+            parameters: ["--catalog", "${var.catalog}", "--prefix", "${var.schema_prefix}"]
+        - task_key: gold
+          environment_key: default
+          depends_on: [{ task_key: silver }]
+          spark_python_task:
+            python_file: ../src/03_gold.py
+            parameters: ["--catalog", "${var.catalog}", "--prefix", "${var.schema_prefix}"]

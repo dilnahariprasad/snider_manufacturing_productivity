@@ -1,0 +1,18 @@
+bundle:
+  name: snider_manufacturing_productivity
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    default: workspace
+  schema_prefix:
+    default: snider
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-dae0e007-7255.cloud.databricks.com
